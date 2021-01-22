@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>首页</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/main.css') }}">
 </head>
 <body>
+    <img src="{{ url_for('static',filename='img/python教程.jpg')}}" alt="">
     <h2>flask的首页</h2>
     <h2>flask的首页的name</h2>{{ name }}
     <h2>flask的首页的age</h2>{{ age }}
@@ -12,4 +14,5 @@
         <h2>flask的首页的sex</h2>{{ sex }}
     {% endif %}
 </body>
+  <script src="{{ url_for('static',filename='js/main.js') }}"></script>
 </html>
