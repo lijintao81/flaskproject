@@ -1,18 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>首页</title>
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/main.css') }}">
-</head>
-<body>
-    <img src="{{ url_for('static',filename='img/python教程.jpg')}}" alt="">
-    <h2>flask的首页</h2>
-    <h2>flask的首页的name</h2>{{ name }}
-    <h2>flask的首页的age</h2>{{ age }}
-    {% if sex %}
-        <h2>flask的首页的sex</h2>{{ sex }}
-    {% endif %}
-</body>
-  <script src="{{ url_for('static',filename='js/main.js') }}"></script>
-</html>
+{% extends 'base.html' %}
+{% block title %}
+    首页
+{% endblock %}
+{% block main %}
+    <div class="container">
+        <div class="list-group">
+            {% for a in articles %}
+                {% if a== articles|first %}
+                    <a href="/{{ a.id }}" class="list-group-item active">
+                         {{ a.title }}
+                    </a>
+                {% else %}
+                    <a href="/{{ a.id }}" class="list-group-item ">
+                         {{ a.title }}
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
