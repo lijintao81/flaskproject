@@ -6,10 +6,10 @@ reversion:1.0
 file_name:demo4
 
 """
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 
 app = Flask(__name__)
-
+app.secret_key = 'akljffje783e378bhd'
 book = {
     'name': '降龙十八掌',
     'author': '金庸',
@@ -31,6 +31,12 @@ book = {
         },
     ]
 }
+users = [
+    {
+        'email': '123456@qq.com',
+        'password': '123456'
+    }
+]
 
 
 @app.route('/')
@@ -45,8 +51,54 @@ def detail(pk):
     for a in book['articles']:
         if int(a['id']) == pk:
             article = a
-
     return render_template('detail.html', **locals())
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html', **locals())
+    elif request.method == 'POST':
+        user = None
+        email = request.form.get('email')
+        password = request.form.get('password')
+        for u in users:
+            print(u['email'], u['password'], '=================')
+            if u['email'] == email and u['password'] == password:
+                session['user'] = email
+                return redirect(url_for('index'))
+        flash("用户名或者密码错误")
+        return redirect(url_for('login'))
+
+
+@app.route('/logout')
+def logout():
+    session.pop('user')
+    return redirect(url_for('index'))
+
+
+@app.route('/regist', methods=['GET', 'POST'])
+def regist():
+    if request.method == 'GET':
+        return render_template('regist.html', **locals())
+    elif request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        password2 = request.form.get('password2')
+        for u in users:
+            if u["email"] == email:
+                flash("邮箱已经注册")
+                return redirect(url_for('regist'))
+        if password != password2:
+            flash("密码不一致")
+            return redirect(url_for('regist'))
+
+        users.append({
+            "email": email,
+            "password": password
+        })
+        print(users, '+++++++++++++++++++')
+        return redirect(url_for('login'))
 
 
 if __name__ == '__main__':
